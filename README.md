@@ -1,6 +1,6 @@
 # virtualbox
 
-[![Build Status](https://cloud.drone.io/api/badges/machippie/virtualbox/status.svg)](https://cloud.drone.io/machippie/google-chrome)
+[![Build Status](https://cloud.drone.io/api/badges/machippie/virtualbox/status.svg)](https://cloud.drone.io/machippie/virtualbox)
 
 Ansible role to configure virtualbox.
 
