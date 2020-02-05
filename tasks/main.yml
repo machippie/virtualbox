@@ -1,0 +1,30 @@
+# Standards: 0.1
+---
+- name: Fact virtualbox user
+  set_fact:
+    virtualbox_user: "{{ virtualbox_user | default(homebrew_user) | default(ansible_user_id) }}"
+  tags:
+    - virtualbox
+
+- name: Install required package
+  ignore_errors: True
+  homebrew_cask:
+    name: virtualbox,virtualbox-extension-pack
+    greedy: True
+    options: appdir=/Applications
+    accept_external_apps: False
+    state: upgraded
+  become: "{{ (virtualbox_user != ansible_user_id) | bool }}"
+  become_user: "{{ virtualbox_user }}"
+  tags:
+    - virtualbox
+
+- name: Remove quarantine flag
+  register: virtualbox_quarantine
+  failed_when: virtualbox_quarantine.rc != 0 and "No such xattr" not in virtualbox_quarantine.stderr
+  changed_when: virtualbox_quarantine.rc == 0
+  command: xattr -d com.apple.quarantine /Applications/VirtualBox.app
+  tags:
+    - virtualbox
+
+...

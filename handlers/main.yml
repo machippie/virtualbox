@@ -1,0 +1,16 @@
+# Standards: 0.1
+---
+- name: Kill virtualbox
+  command: killall VirtualBox
+  register: virtualbox_kill
+  failed_when: virtualbox_kill.rc != 0 and "No matching processes belonging to you were found" not in virtualbox_kill.stderr
+  become: "{{ (virtualbox_user != ansible_user_id) | bool }}"
+  become_user: "{{ virtualbox_user }}"
+
+- name: Start virtualbox
+  when: virtualbox_started
+  command: open -j /Applications/VirtualBox.app
+  become: "{{ (virtualbox_user != ansible_user_id) | bool }}"
+  become_user: "{{ virtualbox_user }}"
+
+...
